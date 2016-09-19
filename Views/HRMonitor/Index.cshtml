@@ -35,8 +35,7 @@
         var urlAction = '/HRMonitor/SendData';
         var isSentData = false;
         var isProcessStarted = false;
-        var heartRateGoal = 20;
-        var startProcess;
+        var startProcess, btnText, btnBgColor;
 
         $(function () {
             $('#spinner').hide();
@@ -55,7 +54,10 @@
 
             $('#btnSend').on('click', function (e) {
                 isSentData = !isSentData;
+                btnText = btnBgColor = undefined;
+
                 if (isSentData && startProcess == undefined) {
+                    $('#lblMessage').css({ 'background-color': '' }).html('&nbsp;');
                     startSendingData();
                     startProcess = setInterval(function () { startSendingData() }, 5000);
                 }
@@ -88,25 +90,51 @@
                 $('#btnSend').attr('value', (isSentData ? 'Stop Sending Data' : 'Start Sending Data'));
                 var bpmVal = parseInt($("#bpm").val());
                 $('#spinner').show();
-                $.post(urlAction, { goalHeartRateThreshold: bpmVal, goalDuration: heartRateGoal }, function (data) {
+                $.post(urlAction, { heartRate: bpmVal }, function (data) {
                     isSentData = false;
                     isProcessStarted = false;
                     $('#spinner').hide();
                     if (data) {
-                        var result = JSON.parse(data);
-                        console.log(result)
-                        if (result.count == heartRateGoal)
-                            $('#lblMessage').css({
-                                'background-color': 'green', 'color': 'white',
-                                'padding': '2px',
-                                'text-align': 'center'
-                            }).html('Congrats, Goal Reached');
-                        else
-                            $('#lblMessage').css({
-                                'background-color': 'red', 'color': 'white',
-                                'padding': '2px',
-                                'text-align': 'center'
-                            }).html('Heart Rate Goal');
+                        console.log(data);
+                        if (data.indexOf("Done") != -1) {
+                            btnBgColor = "green";
+                            btnText = "Done! Start Exercising";
+                            isSentData = false;
+                            isProcessStarted = false;
+                            if (startProcess) {
+                                clearInterval(startProcess);
+                                startProcess = undefined;
+                            }
+                            $('#btnSend').attr('value', 'Start Sending Data');
+                        }
+                        else if (data.indexOf("Exercise More") != -1) {
+                            btnBgColor = "yellow";
+                            btnText = "Exercise More";
+                        }
+                        else if (data.indexOf("Take a Break") != -1) {
+                            btnBgColor = "red";
+                            btnText = "Take a Break";
+                        }
+                        else if (data.indexOf("Keep Exercising") != -1) {
+                            btnBgColor = "green";
+                            btnText = "Keep Exercising";
+                        }
+                    }
+
+                    if (btnText && btnBgColor) {
+                        $('#lblMessage').css({
+                            'background-color': btnBgColor, 'color': 'white',
+                            'padding': '2px',
+                            'text-align': 'center'
+                        }).html(btnText);
+                        return;
+                    }
+                    else {
+                        $('#lblMessage').css({
+                            'background-color': 'red', 'color': 'white',
+                            'padding': '2px',
+                            'text-align': 'center'
+                        }).html('Heart Rate Goal');
                     }
                 });
             }

@@ -66,6 +66,7 @@ namespace DreamforceIOTCloudApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=HRMonitor}/{action=Index}/{id?}");
+
             });
         }
     }
