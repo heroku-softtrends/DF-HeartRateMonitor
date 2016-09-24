@@ -92,31 +92,27 @@
                     $('#spinner').hide();
                     if (data) {
                         console.log(data);
-                        var resultJSON = JSON.parse(data);
-                        var eventMessage = resultJSON && resultJSON.message ? resultJSON.message : null;
-                        if (eventMessage) {
-                            if (eventMessage.indexOf("Done") != -1) {
-                                btnBgColor = "green";
-                                btnText = "Done! Start Exercising";
-                                isSentData = false;
-                                if (startProcess) {
-                                    clearInterval(startProcess);
-                                    startProcess = undefined;
-                                }
-                                $('#btnSend').attr('value', 'Start Sending Data');
+                        if (data.indexOf("Done") != -1) {
+                            btnBgColor = "green";
+                            btnText = "Done! Start Exercising";
+                            isSentData = false;
+                            if (startProcess) {
+                                clearInterval(startProcess);
+                                startProcess = undefined;
                             }
-                            else if (eventMessage.indexOf("Exercise More") != -1) {
-                                btnBgColor = "yellow";
-                                btnText = "Exercise More";
-                            }
-                            else if (eventMessage.indexOf("Take a Break") != -1) {
-                                btnBgColor = "red";
-                                btnText = "Take a Break";
-                            }
-                            else if (eventMessage.indexOf("Keep Exercising") != -1) {
-                                btnBgColor = "green";
-                                btnText = "Keep Exercising";
-                            }
+                            $('#btnSend').attr('value', 'Start Sending Data');
+                        }
+                        else if (data.indexOf("Exercise More") != -1) {
+                            btnBgColor = "yellow";
+                            btnText = "Exercise More";
+                        }
+                        else if (data.indexOf("Take a Break") != -1) {
+                            btnBgColor = "red";
+                            btnText = "Take a Break";
+                        }
+                        else if (data.indexOf("Keep Exercising") != -1) {
+                            btnBgColor = "green";
+                            btnText = "Keep Exercising";
                         }
                     }
 
