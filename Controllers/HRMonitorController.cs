@@ -20,8 +20,6 @@ namespace DreamforceIOTCloudApp.Controllers
 {
     public class HRMonitorController : Controller
     {
-        public static string mDeviceID = "000909D";
-
         // GET: /<controller>/
         public IActionResult Index()
         {
@@ -46,7 +44,7 @@ namespace DreamforceIOTCloudApp.Controllers
                     {
                         Content = new StringContent(JsonConvert.SerializeObject(jsonData), Encoding.UTF8, "application/json"),
                         Method = HttpMethod.Post,
-                        RequestUri = new Uri("https://mq-aws-eu-west-1-1.iron.io/3/projects/57dbdea41e0aa6000858dbae/queues/messages/reservations?oauth=pqYbPAL1MN3mf5PyBu2S")
+                        RequestUri = new Uri(string.Format("{0}/reservations?oauth={1}", ConfigVars.Instance.IronMQUrl, ConfigVars.Instance.IronMQToken))
                     };
                     //reserve message in iron message queue for 1 minute
                     var response = await httpClient1.SendAsync(request);
@@ -58,8 +56,8 @@ namespace DreamforceIOTCloudApp.Controllers
                         if (ironMessage.Count > 0 && ironMessage.ContainsKey("messages"))
                             messagesLst = JsonConvert.DeserializeObject<IList<HeartRateMessage>>(ironMessage["messages"].ToString());
 
-                        if (messagesLst != null && messagesLst.LastOrDefault() != null)
-                            hmMessage = messagesLst.LastOrDefault();
+                        if (messagesLst != null && messagesLst.Where(p => !string.IsNullOrEmpty(p.body) && p.body.Contains(ConfigVars.Instance.DeviceID)).Count() > 0)
+                            hmMessage = messagesLst.Where(p => p.body.Contains(ConfigVars.Instance.DeviceID)).LastOrDefault();
 
                         Parallel.Invoke(() =>
                         {
@@ -73,18 +71,18 @@ namespace DreamforceIOTCloudApp.Controllers
                             if (hmMessage == null || (hmMessage != null && !string.IsNullOrEmpty(hmMessage.body) && !hmMessage.body.ToUpper().Contains("DONE")))
                             {
                                 HeartRateMonitor hrMonitor = new HeartRateMonitor();
-                                hrMonitor.deviceID = mDeviceID;
+                                hrMonitor.deviceID = ConfigVars.Instance.DeviceID;
                                 hrMonitor.heartRate = heartRate;
                                 using (var httpClient2 = new HttpClient())
                                 {
                                     httpClient2.DefaultRequestHeaders.Accept.Clear();
                                     httpClient2.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                                    httpClient2.DefaultRequestHeaders.Add("Authorization", "Bearer iguZgpnIwr8N60cD7cYgSMbYQm9QZXEY9AaqmeD6f4d2DoyvZNEhcQdzGSSFivDylWcXR5ShTu1AfMSCJi9sAj");
+                                    httpClient2.DefaultRequestHeaders.Add("Authorization", ConfigVars.Instance.DeviceToken);
                                     request = new HttpRequestMessage
                                     {
                                         Content = new StringContent(JsonConvert.SerializeObject(hrMonitor), Encoding.UTF8, "application/json"),
                                         Method = HttpMethod.Post,
-                                        RequestUri = new Uri("https://ingestion-xcdvudaz0dz3.us3.sfdcnow.com/streams/heart_rate_monito001/heart_rate_monito001/event")
+                                        RequestUri = new Uri(ConfigVars.Instance.EnpointUrl)
                                     };
                                     response = await httpClient2.SendAsync(request);
                                 }
@@ -118,7 +116,7 @@ namespace DreamforceIOTCloudApp.Controllers
                     {
                         Content = new StringContent(JsonConvert.SerializeObject(jsonData), Encoding.UTF8, "application/json"),
                         Method = HttpMethod.Delete,
-                        RequestUri = new Uri("https://mq-aws-eu-west-1-1.iron.io/3/projects/57dbdea41e0aa6000858dbae/queues/messages/messages/" + pMessageID + "?oauth=pqYbPAL1MN3mf5PyBu2S")
+                        RequestUri = new Uri(string.Format("{0}/messages/{1}?oauth={2}", ConfigVars.Instance.IronMQUrl, pMessageID, ConfigVars.Instance.IronMQToken))
                     };
                     var response = await httpClient.SendAsync(request);
                 }
