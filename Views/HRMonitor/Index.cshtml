@@ -93,7 +93,7 @@
                     if (data) {
                         console.log(data);
                         var resultJSON = JSON.parse(data);
-                        var eventMessage = resultJSON && resultJSON.eventMessage ? resultJSON.eventMessage : null;
+                        var eventMessage = resultJSON && resultJSON.message ? resultJSON.message : null;
                         if (eventMessage) {
                             if (eventMessage.indexOf("Done") != -1) {
                                 btnBgColor = "green";
