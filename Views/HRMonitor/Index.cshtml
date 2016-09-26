@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Heart Rate Monitor Connected Device";
+    ViewData["Title"] = "Heartrate Monitor Connected Device";
 }
 
 <div class="mobile-content">
@@ -12,7 +12,7 @@
         <tr>
             <td>
                 <div class="mobile-monitor-action">
-                    <p style="margin-top:25%;">
+                    <p style="margin-top:15%;">
                         <label id="lblbpm"></label>
                         <input type="hidden" id="bpm" value="100">
                     </p>
@@ -48,7 +48,7 @@
                 min: 100,
                 max: 200,
                 slide: function (event, ui) {
-                    $("#lblbpm").text('BPM:' + ui.value);
+                    $("#lblbpm").text('Measured Heartrate:' + ui.value);
                     $("#bpm").val(ui.value);
                 }
             });
