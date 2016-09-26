@@ -40,7 +40,7 @@
 
         $(function () {
             $('#spinner').hide();
-            $("#lblbpm").text('BPM: ' + $("#bpm").val());
+            $("#lblbpm").text('BPM:' + $("#bpm").val());
 
             $("#slider-range-min").slider({
                 range: "min",
@@ -48,7 +48,7 @@
                 min: 100,
                 max: 200,
                 slide: function (event, ui) {
-                    $("#lblbpm").text('Target Heartrate Goal: ' + ui.value);
+                    $("#lblbpm").text('BPM:' + ui.value);
                     $("#bpm").val(ui.value);
                 }
             });
@@ -95,8 +95,8 @@
                     if (data) {
                         console.log(data);
                         if (data.indexOf("Done") != -1) {
-                            btnBgColor = "green";
-                            btnText = "Done! Start Exercising";
+                            btnBgColor = "#0070d2";
+                            btnText = "Done! Start Again!";
                             stopSendingData();
                         }
                         else if (data.indexOf("Exercise More") != -1) {
