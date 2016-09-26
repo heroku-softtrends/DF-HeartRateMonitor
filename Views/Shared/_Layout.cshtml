@@ -5,18 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Heart Rate Monitor</title>
 
-    <environment names="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link href="~/lib/jquery/dist/css/jquery-ui.css" rel="stylesheet" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link href="~/lib/jquery/dist/css/jquery-ui.css" rel="stylesheet" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </environment>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link href="~/lib/jquery/dist/css/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <style type="text/css">
-        body .hr-monitor-action {
+        body .mobile-monitor-action {
             display: block;
             position: relative;
         }
@@ -66,19 +59,10 @@
         </footer>
     </div>
     <div id="spinner" style="display:block;"></div>
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/js/jquery.js"></script>
-        <script src="~/lib/jquery/dist/js/jquery-ui.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/lib/jquery/dist/js/jquery.js"></script>
-        <script src="~/lib/jquery/dist/js/jquery-ui.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-
+    <script src="~/lib/jquery/dist/js/jquery.js"></script>
+    <script src="~/lib/jquery/dist/js/jquery-ui.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
         $(function () {

@@ -10,22 +10,11 @@
     padding-right: 15px;
 }
 
-.clear {
-    clear: both;
-}
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
 textarea {
     max-width: 280px;
-}
-
-.sendbtn {
-    padding: 2px;
-    background-color: #f6931f;
-    border: 2px solid #337ab7;
-    color: white;
-    width: 100%;
 }
 
 /* Carousel */
@@ -39,17 +28,9 @@ textarea {
     width: 100%;
 }
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
-}
-
-.hrm-content {
+.mobile-content {
     margin-top: 0.25%;
-    width: 292px;
+    width: 25%;
     height: 600px;
     background: url(../images/onlydevice.png) no-repeat;
     position: relative;
@@ -61,13 +42,13 @@ textarea {
     background-size: cover;
 }
 
-.hr-monitor {
+.mobile-monitor {
     position: relative;
     top: 97px;
-    left: 36px;
+    left: 35px;
 }
 
-    .hr-monitor input[type=button] {
+    .mobile-monitor input[type=button] {
         background-color: #f6931f;
         color: white;
         width: 100%;
@@ -76,12 +57,46 @@ textarea {
         border: 2px solid #337ab7;
     }
 
-    .hr-monitor label {
-        margin-top: 3em;
+    .mobile-monitor label {
         font-size: 11px;
         color: gray;
     }
 
-    .hr-monitor .ui-slider {
+    .mobile-monitor p {
+        margin: 0px;
+    }
+
+    .mobile-monitor .ui-slider {
         margin: 8px 0px 0px 2px;
     }
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+
+    .mobile-monitor {
+        margin: 0 auto;
+        position:relative;
+        top:10%;
+        left:0%;
+    }
+
+    .mobile-content {
+        background:none !important;
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
+        margin: 5% auto;
+        height:100%;
+        width:100%;
+        left:0%;
+    }
+
+    footer {
+        text-align: center;
+    }
+}

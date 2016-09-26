@@ -2,22 +2,24 @@
     ViewData["Title"] = "Heart Rate Monitor Goals";
 }
 
-<div class="hrm-content">
-    <table class="hr-monitor">
+<div class="mobile-content">
+    <table class="mobile-monitor">
         <tr>
             <td>
                 <img src="~/images/reartrate.png" alt="bpm" />
             </td>
         </tr>
         <tr>
-            <td class="hr-monitor-action">
-                <p>
-                    <label id="lblbpm"></label>
-                    <input type="hidden" id="bpm" value="100">
-                </p>
-                <div id="slider-range-min" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
-                    <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min" style="width: 5.15021%;">
-                    </div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 5.15021%;"></span>
+            <td>
+                <div class="mobile-monitor-action">
+                    <p>
+                        <label id="lblbpm"></label>
+                        <input type="hidden" id="bpm" value="100">
+                    </p>
+                    <div id="slider-range-min" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                        <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min" style="width: 5.15021%;">
+                        </div><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="left: 5.15021%;"></span>
+                    </div>
                 </div>
             </td>
         </tr>
@@ -95,12 +97,7 @@
                         if (data.indexOf("Done") != -1) {
                             btnBgColor = "green";
                             btnText = "Done! Start Exercising";
-                            isSentData = false;
-                            if (startProcess) {
-                                clearInterval(startProcess);
-                                startProcess = undefined;
-                            }
-                            $('#btnSend').attr('value', 'Start Sending Data');
+                            stopSendingData();
                         }
                         else if (data.indexOf("Exercise More") != -1) {
                             btnBgColor = "yellow";
