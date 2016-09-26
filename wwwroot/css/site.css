@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #16325c;
 }
 
 /* Wrapping element */
@@ -49,7 +50,7 @@ textarea {
 }
 
     .mobile-monitor input[type=button] {
-        background-color: #f6931f;
+        background-color: #0070d2;
         color: white;
         width: 100%;
         margin-top: 4px;
