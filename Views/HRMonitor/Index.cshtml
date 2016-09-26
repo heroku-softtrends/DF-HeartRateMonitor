@@ -76,7 +76,7 @@
             }
             if ($) {
                 $('#btnSend').attr('value', 'Start Sending Data');
-                $('#lblMessage').css({ 'background-color': '' }).html('&nbsp;');
+                $('#lblMessage').css({ '#0070d2': '' }).html('&nbsp;');
                 $('#spinner').hide();
             }
         }
@@ -88,7 +88,7 @@
             if (isSentData && $ && $("#bpm").val().length > 0) {
                 $('#btnSend').attr('value', (isSentData ? 'Stop Sending Data' : 'Start Sending Data'));
                 var bpmVal = parseInt($("#bpm").val());
-                $('#spinner').show();
+                $('#spinner').hide();
                 $.post(urlAction, { heartRate: bpmVal }, function (data) {
                     isSentData = false;
                     $('#spinner').hide();
@@ -100,16 +100,16 @@
                             stopSendingData();
                         }
                         else if (data.indexOf("Exercise More") != -1) {
-                            btnBgColor = "yellow";
-                            btnText = "Exercise More";
+                            btnBgColor = "#339ed2";
+                            btnText = "Let's Exercise that Heart!";
                         }
                         else if (data.indexOf("Take a Break") != -1) {
-                            btnBgColor = "red";
-                            btnText = "Take a Break";
+                            btnBgColor = "#c52d3a";
+                            btnText = "Max Heartrate...Slow Down";
                         }
                         else if (data.indexOf("Keep Exercising") != -1) {
-                            btnBgColor = "green";
-                            btnText = "Keep Exercising";
+                            btnBgColor = "#3c9855";
+                            btnText = "Perfect Heartrate Range!!";
                         }
                     }
 
@@ -123,10 +123,10 @@
                     }
                     else {
                         $('#lblMessage').css({
-                            'background-color': 'red', 'color': 'white',
+                            'background-color': '#f7f7f7', 'color': 'black',
                             'padding': '2px',
                             'text-align': 'center'
-                        }).html('Heart Rate Goal');
+                        }).html('Checking current Heartrate...');
                     }
                 });
             }
