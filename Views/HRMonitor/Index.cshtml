@@ -12,7 +12,7 @@
         <tr>
             <td>
                 <div class="mobile-monitor-action">
-                    <p>
+                    <p style="margin-top:25%;">
                         <label id="lblbpm"></label>
                         <input type="hidden" id="bpm" value="100">
                     </p>
@@ -95,8 +95,8 @@
                     if (data) {
                         console.log(data);
                         if (data.indexOf("Done") != -1) {
-                            btnBgColor = "#0070d2";
-                            btnText = "Done! Start Again!";
+                            btnBgColor = "#f7f7f7";
+                            btnText = "Want to keep going?";
                             stopSendingData();
                         }
                         else if (data.indexOf("Exercise More") != -1) {
