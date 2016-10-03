@@ -26,7 +26,7 @@
         <tr>
             <td>
                 <div id="lblMessage" style="margin-top:30px;">&nbsp;</div>
-                <input id="btnSend" type="button" value="Start Sending Data" class="btn-custom"/>
+                <input id="btnSend" type="button" value="Start Sending Data" class="btn-custom" />
             </td>
         </tr>
     </table>
@@ -35,7 +35,7 @@
 @section Scripts{
     <script type="text/javascript">
         var urlAction = '/HRMonitor/SendData';
-        var isSentData = false;
+        var isSentData = false, httpRequestLimit = 30, httpRequestCount = 0;
         var startProcess, btnText, btnBgColor;
 
         $(function () {
@@ -56,6 +56,7 @@
             $('#btnSend').on('click', function (e) {
                 isSentData = !isSentData;
                 btnText = btnBgColor = undefined;
+                httpRequestCount = 0;
 
                 if (isSentData && startProcess == undefined) {
                     $('#lblMessage').css({ 'background-color': '' }).html('&nbsp;');
@@ -70,6 +71,7 @@
 
         function stopSendingData() {
             isSentData = false;
+            httpRequestCount = 0;
             if (startProcess) {
                 clearInterval(startProcess);
                 startProcess = undefined;
@@ -84,11 +86,14 @@
         function startSendingData() {
             if (startProcess && isSentData)
                 return;
+
             isSentData = true;
+            httpRequestCount++;
             if (isSentData && $ && $("#bpm").val().length > 0) {
                 $('#btnSend').attr('value', (isSentData ? 'Stop Sending Data' : 'Start Sending Data'));
                 var bpmVal = parseInt($("#bpm").val());
                 $('#spinner').hide();
+
                 $.post(urlAction, { heartRate: bpmVal }, function (data) {
                     isSentData = false;
                     $('#spinner').hide();
@@ -127,6 +132,10 @@
                             'padding': '2px',
                             'text-align': 'center'
                         }).html('Checking current Heartrate...');
+                    }
+
+                    if (httpRequestCount == httpRequestLimit) {
+                        stopSendingData();
                     }
                 });
             }
