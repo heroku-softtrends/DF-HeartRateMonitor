@@ -36,11 +36,12 @@
     <script type="text/javascript">
         var urlAction = '/HRMonitor/SendData';
         var isSentData = false, httpRequestLimit = 30, httpRequestCount = 0;
-        var startProcess, btnText, btnBgColor;
+        var startProcess, btnText, btnBgColor, btnForeColor;
+        var isSliderChangeStatusShown = false;
 
         $(function () {
             $('#spinner').hide();
-            $("#lblbpm").text('BPM:' + $("#bpm").val());
+            $("#lblbpm").text('Standing Heartrate:' + $("#bpm").val() + ' bpm');
 
             $("#slider-range-min").slider({
                 range: "min",
@@ -48,20 +49,31 @@
                 min: 100,
                 max: 200,
                 slide: function (event, ui) {
-                    $("#lblbpm").text('Measured Heartrate:' + ui.value);
+                    $("#lblbpm").text('Heartrate Goal:' + ui.value + ' bpm');
                     $("#bpm").val(ui.value);
+
+                    $('#lblMessage').css({
+                        'background-color': '#f7f7f7', 'color': 'black',
+                        'padding': '2px',
+                        'text-align': 'center'
+                    }).html(($('#btnSend').attr('value') == "Start Sending Data" ? "Please click Start Sending Data" : "Measuring Heartrate..."));
+                    isSliderChangeStatusShown = true;
                 }
             });
 
             $('#btnSend').on('click', function (e) {
                 isSentData = !isSentData;
-                btnText = btnBgColor = undefined;
+                btnText = btnBgColor = btnForeColor = undefined;
                 httpRequestCount = 0;
-
+                isSliderChangeStatusShown = false;
                 if (isSentData && startProcess == undefined) {
-                    $('#lblMessage').css({ 'background-color': '' }).html('&nbsp;');
+                    $('#lblMessage').css({
+                        'background-color': '#f7f7f7', 'color': 'black',
+                        'padding': '2px',
+                        'text-align': 'center'
+                    }).html('Measuring current Heartrate...');
                     startSendingData();
-                    startProcess = setInterval(function () { startSendingData() }, 5000);
+                    startProcess = setInterval(function () { startSendingData() }, 3000);
                 }
                 else {
                     stopSendingData();
@@ -72,13 +84,14 @@
         function stopSendingData() {
             isSentData = false;
             httpRequestCount = 0;
+            isSliderChangeStatusShown = false;
             if (startProcess) {
                 clearInterval(startProcess);
                 startProcess = undefined;
             }
             if ($) {
                 $('#btnSend').attr('value', 'Start Sending Data');
-                $('#lblMessage').css({ '#0070d2': '' }).html('&nbsp;');
+                $('#lblMessage').css({ 'background-color': '' }).html('&nbsp;');
                 $('#spinner').hide();
             }
         }
@@ -99,43 +112,52 @@
                     $('#spinner').hide();
                     if (data) {
                         console.log(data);
-                        if (data.indexOf("Done") != -1) {
+                        if (data.indexOf("Done") != -1 || httpRequestCount == httpRequestLimit) {
+                            isSliderChangeStatusShown = false;
                             btnBgColor = "#f7f7f7";
-                            btnText = "Want to keep going?";
+                            btnForeColor = "black";
+                            btnText = "Click to Continue";
                             stopSendingData();
                         }
                         else if (data.indexOf("Exercise More") != -1) {
+                            isSliderChangeStatusShown = false;
                             btnBgColor = "#339ed2";
-                            btnText = "Let's Exercise that Heart!";
+                            btnForeColor = "white";
+                            btnText = "Increase your BPMs";
                         }
                         else if (data.indexOf("Take a Break") != -1) {
+                            isSliderChangeStatusShown = false;
                             btnBgColor = "#c52d3a";
-                            btnText = "Max Heartrate...Slow Down";
+                            btnForeColor = "white";
+                            btnText = "Max Heartrate…Take a Break";
                         }
                         else if (data.indexOf("Keep Exercising") != -1) {
+                            isSliderChangeStatusShown = false;
                             btnBgColor = "#3c9855";
+                            btnForeColor = "white";
                             btnText = "Perfect Heartrate Range!!";
                         }
                     }
 
-                    if (btnText && btnBgColor) {
+                    if (btnText && btnBgColor && btnForeColor) {
                         $('#lblMessage').css({
-                            'background-color': btnBgColor, 'color': 'white',
+                            'background-color': btnBgColor, 'color': btnForeColor,
                             'padding': '2px',
                             'text-align': 'center'
                         }).html(btnText);
                         return;
                     }
-                    else {
-                        $('#lblMessage').css({
-                            'background-color': '#f7f7f7', 'color': 'black',
-                            'padding': '2px',
-                            'text-align': 'center'
-                        }).html('Checking current Heartrate...');
-                    }
-
-                    if (httpRequestCount == httpRequestLimit) {
-                        stopSendingData();
+                    else if (!isSliderChangeStatusShown) {
+                        if (httpRequestCount != 0) {
+                            $('#lblMessage').css({
+                                'background-color': '#f7f7f7', 'color': 'black',
+                                'padding': '2px',
+                                'text-align': 'center'
+                            }).html('Measuring current Heartrate...');
+                        }
+                        else {
+                            $('#lblMessage').css({ 'background-color': '' }).html('&nbsp;');
+                        }
                     }
                 });
             }

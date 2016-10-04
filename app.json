@@ -1,0 +1,33 @@
+{
+  "name": "DF'16 Fitness Monitor Demo",
+  "description": "IOT Cloud ingesting Heartrate data from a Heroku Connected App",
+  "repository": "https://github.com/heroku-softtrends/DF-HeartRateMonitor",
+  "logo": "https://s3.amazonaws.com/herokumximages/heroku.png",
+  "keywords": ["ASP.NET", "IOT", "Dreamforce", "Thunder", "Kafka"],
+
+  "env": {
+    "deviceID": {
+        "description": "We will generate a unique deviceID for you",
+        "generator": "secret"},
+    "deviceToken": {
+        "description": "Bearer Token required by IOT Cloud to send messages",
+        "value": "Bearer iguZgpnIwr8N60cD7cYgSMbYQm9QZXEY9AaqmeD6f4d2DoyvZNEhcQdzGSSFivDylWcXR5ShTu1AfMSCJi9sAj"},
+    "endpointURL": {
+        "description": "IOT Cloud Endpoint URL for ingestion",
+        "value": "https://ingestion-xcdvudaz0dz3.us3.sfdcnow.com/streams/heart_rate_monito001/heart_rate_monito001/event"},
+    "IRON_MQ_PROJECT_ID": {
+        "description": "Heroku IronMQ Project ID for return messages from IOT Cloud ",
+        "value": "57dbdea41e0aa6000858dbae"},
+    "IRON_MQ_TOKEN": {
+        "description": "Heroku IronMQ Token for return messages from IOT Cloud ",
+        "value": "pqYbPAL1MN3mf5PyBu2S"},
+     "IqueueURL": {
+        "description": "Heroku IronMQ Queue for return messages from IOT Cloud ",
+        "value": "https://mq-aws-eu-west-1-1.iron.io/3/projects/57dbdea41e0aa6000858dbae/queues/messages"}
+    },
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku-softtrends/dotnetcore.main"
+    }
+  ]
+}

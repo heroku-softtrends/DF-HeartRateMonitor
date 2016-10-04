@@ -32,69 +32,66 @@ namespace DreamforceIOTCloudApp.Controllers
         {
             try
             {
+                HeartRateMessage hmMessage = null;
                 using (var httpClient1 = new HttpClient())
                 {
-                    HeartRateMessage hmMessage = null;
-                    dynamic jsonData = new ExpandoObject();
-                    jsonData.n = 1;
-                    jsonData.timeout = 60000;
-                    jsonData.wait = 0;
-                    jsonData.delete = false;
+                    HeartRateMonitor hrMonitor = new HeartRateMonitor();
+                    hrMonitor.deviceID = ConfigVars.Instance.DeviceID;
+                    hrMonitor.heartRate = heartRate;
+                    httpClient1.DefaultRequestHeaders.Accept.Clear();
+                    httpClient1.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    httpClient1.DefaultRequestHeaders.Add("Authorization", ConfigVars.Instance.DeviceToken);
                     HttpRequestMessage request = new HttpRequestMessage
                     {
-                        Content = new StringContent(JsonConvert.SerializeObject(jsonData), Encoding.UTF8, "application/json"),
+                        Content = new StringContent(JsonConvert.SerializeObject(hrMonitor), Encoding.UTF8, "application/json"),
                         Method = HttpMethod.Post,
-                        RequestUri = new Uri(string.Format("{0}/reservations?oauth={1}", ConfigVars.Instance.IronMQUrl, ConfigVars.Instance.IronMQToken))
+                        RequestUri = new Uri(ConfigVars.Instance.EnpointUrl)
                     };
-                    //reserve message in iron message queue for 1 minute
                     var response = await httpClient1.SendAsync(request);
                     if (response.IsSuccessStatusCode)
                     {
-                        IList<HeartRateMessage> messagesLst = null;
-                        var ironResponse = await response.Content.ReadAsStringAsync();
-                        var ironMessage = JsonConvert.DeserializeObject<IDictionary<string, object>>(ironResponse);
-                        if (ironMessage.Count > 0 && ironMessage.ContainsKey("messages"))
-                            messagesLst = JsonConvert.DeserializeObject<IList<HeartRateMessage>>(ironMessage["messages"].ToString());
-
-                        if (messagesLst != null && messagesLst.Where(p => !string.IsNullOrEmpty(p.body) && p.body.Contains(ConfigVars.Instance.DeviceID)).Count() > 0)
-                            hmMessage = messagesLst.Where(p => p.body.Contains(ConfigVars.Instance.DeviceID)).LastOrDefault();
-
-                        Parallel.Invoke(() =>
+                        using (var httpClient2 = new HttpClient())
                         {
-                            if (hmMessage != null)
+                            dynamic jsonData = new ExpandoObject();
+                            jsonData.n = 1;
+                            jsonData.timeout = 60000;
+                            jsonData.wait = 0;
+                            jsonData.delete = false;
+                            request = new HttpRequestMessage
                             {
-                                //delete iron queue message after reading
-                                DeleteIronMessageByID(hmMessage.id, hmMessage.reservation_id);
-                            }
-                        }, async () =>
-                        {
-                            if (hmMessage == null || (hmMessage != null && !string.IsNullOrEmpty(hmMessage.body) && !hmMessage.body.ToUpper().Contains("DONE")))
+                                Content = new StringContent(JsonConvert.SerializeObject(jsonData), Encoding.UTF8, "application/json"),
+                                Method = HttpMethod.Post,
+                                RequestUri = new Uri(string.Format("{0}/reservations?oauth={1}", ConfigVars.Instance.IronMQUrl, ConfigVars.Instance.IronMQToken))
+                            };
+
+                            response = await httpClient2.SendAsync(request);
+                            if (response.IsSuccessStatusCode)
                             {
-                                HeartRateMonitor hrMonitor = new HeartRateMonitor();
-                                hrMonitor.deviceID = ConfigVars.Instance.DeviceID;
-                                hrMonitor.heartRate = heartRate;
-                                using (var httpClient2 = new HttpClient())
+                                IList<HeartRateMessage> messagesLst = null;
+                                var ironResponse = await response.Content.ReadAsStringAsync();
+                                var ironMessage = JsonConvert.DeserializeObject<IDictionary<string, object>>(ironResponse);
+                                if (ironMessage.Count > 0 && ironMessage.ContainsKey("messages"))
+                                    messagesLst = JsonConvert.DeserializeObject<IList<HeartRateMessage>>(ironMessage["messages"].ToString());
+                                if (messagesLst != null && messagesLst.Where(p => !string.IsNullOrEmpty(p.body) && p.body.Contains(ConfigVars.Instance.DeviceID)).Count() > 0)
+                                    hmMessage = messagesLst.Where(p => p.body.Contains(ConfigVars.Instance.DeviceID)).LastOrDefault();
+
+                                if (hmMessage != null)
                                 {
-                                    httpClient2.DefaultRequestHeaders.Accept.Clear();
-                                    httpClient2.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                                    httpClient2.DefaultRequestHeaders.Add("Authorization", ConfigVars.Instance.DeviceToken);
-                                    request = new HttpRequestMessage
+                                    Parallel.Invoke(() =>
                                     {
-                                        Content = new StringContent(JsonConvert.SerializeObject(hrMonitor), Encoding.UTF8, "application/json"),
-                                        Method = HttpMethod.Post,
-                                        RequestUri = new Uri(ConfigVars.Instance.EnpointUrl)
-                                    };
-                                    response = await httpClient2.SendAsync(request);
+                                        //delete iron queue message after reading
+                                        DeleteIronMessageByID(hmMessage.id, hmMessage.reservation_id);
+                                    });
                                 }
                             }
-                        });
+                        }
                     }
-
-                    if (hmMessage == null)
-                        return Json(null);
-                    else
-                        return Json(hmMessage.body);
                 }
+
+                if (hmMessage == null)
+                    return Json(null);
+                else
+                    return Json(hmMessage.body);
             }
             catch (Exception ex)
             {
