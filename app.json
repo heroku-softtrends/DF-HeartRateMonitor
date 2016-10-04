@@ -7,8 +7,8 @@
 
   "env": {
     "deviceID": {
-        "description": "Create a deviceID using 000909D[FirstInitialLastName]",
-        "value": ""},
+        "description": "We will generate a unique deviceID for you",
+ +      "generator": "secret"},
     "deviceToken": {
         "description": "Bearer Token required by IOT Cloud to send messages",
         "value": "Bearer iguZgpnIwr8N60cD7cYgSMbYQm9QZXEY9AaqmeD6f4d2DoyvZNEhcQdzGSSFivDylWcXR5ShTu1AfMSCJi9sAj"},
