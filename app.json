@@ -21,7 +21,7 @@
     "IRON_MQ_TOKEN": {
         "description": "Heroku IronMQ Token for return messages from IOT Cloud ",
         "value": "pqYbPAL1MN3mf5PyBu2S"},
-     "IqueueURL": {
+     "queueURL": {
         "description": "Heroku IronMQ Queue for return messages from IOT Cloud ",
         "value": "https://mq-aws-eu-west-1-1.iron.io/3/projects/57dbdea41e0aa6000858dbae/queues/messages"}
     },
