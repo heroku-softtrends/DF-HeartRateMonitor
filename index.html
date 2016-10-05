@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Heroku Fitness Demo for IOT Cloud by heroku-softtrends</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Heroku Fitness Demo for IOT Cloud</h1>
+        <p>DF&#39;16 Heroku Fitness Demo App for IOT Cloud</p>
+
+        <p class="view"><a href="https://github.com/heroku-softtrends/DF-HeartRateMonitor">View the Project on GitHub <small>heroku-softtrends/DF-HeartRateMonitor</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/heroku-softtrends/DF-HeartRateMonitor/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/heroku-softtrends/DF-HeartRateMonitor/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/heroku-softtrends/DF-HeartRateMonitor">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="dreamforce16" class="anchor" href="#dreamforce16" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dreamforce'16</h1>
+
+<h2>
+<a id="iot-cloud--heroku-enterprise-fitness-monitoring-ingestion-app" class="anchor" href="#iot-cloud--heroku-enterprise-fitness-monitoring-ingestion-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>IOT Cloud &amp; Heroku Enterprise: <em>Fitness Monitoring Ingestion App</em>
+</h2>
+
+<p><strong>How to Deploy &amp; Configure the Demo</strong></p>
+
+<ul>
+<li>Ensure you have a <a href="https://signup.heroku.com">Heroku Account</a> and are signed into it</li>
+<li>Click the Deploy to Heroku Button below</li>
+<li>Leave the pre-populated Configuration Vars as-is, unless asked to modify them</li>
+<li>Confirm the Deploy</li>
+<li>Watch the magic of IOT Cloud &amp; Heroku together!</li>
+</ul>
+
+<p><strong>What the Configuration Variables mean</strong></p>
+
+<ul>
+<li>
+<code>deviceID</code> - identifies the Heroku App to IOT Cloud as a "unique Heartrate Monitoring Device" and must be unique</li>
+<li>
+<code>deviceToken</code> - allows IOT Cloud to authorize incoming messages to its Endpoint</li>
+<li>
+<code>endpointURL</code> - URL the Heroku App uses to send "Heartrate Monitoring data" (aka the IOT Endpoint)</li>
+<li>
+<code>IRON_MQ_PROJECT_ID</code> - allows the Heroku MQ listener to know where incoming messages should be stored (where its queues live)</li>
+<li>
+<code>IRON_MQ_TOKEN</code> - allows the Heroku MQ to authorize incoming messages from IOT Cloud to its Queue Endpoint</li>
+<li>
+<code>queueURL</code> - URL the IOT Cloud Orchestration uses to send "HeartRate Monitoring data" (aka the Heroku App Endpoint)</li>
+</ul>
+
+<p><strong>Technologies Used in this Demo</strong></p>
+
+<ol>
+<li>Heroku Enterprise: <em>used to generate large amounts of real-world data &amp; send it to the IOT Cloud endpoint</em>
+</li>
+<li>IOT Cloud: <em>handles message ingestion, orchestration &amp; business workflow for the 'Heroku IOT Demo App'</em>
+</li>
+<li>Heroku MQ (Message Queue) Add-On: <em>used to handle UX change responses from IOT Cloud to the Heroku App</em>
+</li>
+<li>ASP.NET Core: <em>language the Heroku App was written in (refer to <a href="http://www.dotnetbuildpacks.com">.NET Buildpack Support</a>)</em>
+</li>
+</ol>
+
+<p><a href="https://heroku.com/deploy?template=https://github.com/heroku-softtrends/DF-HeartRateMonitor"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy"></a></p>
+
+<p><strong>What to Expect Once Deployed</strong></p>
+
+<p><img src="https://s3.amazonaws.com/herokumximages/heroku-heartmonitor.png" alt="alt text" title="Heroku IOT Cloud Heart Monitor App"></p>
+
+<ol>
+<li>Click <em>"Start Sending Data"</em> and wait; After detecting inactivity, the app will alert you to <em>"Increase your BPMs"</em>
+</li>
+<li>Drag the <em>"Heartrate Goal slider"</em>, indicating the BPM level you'd like to meet during your fitness routine; the app will alert you with a message stating <em>"Perfect Heartrate Range"</em> when you're in an ideal range of 125-174 BPMs</li>
+<li>Drag the <em>"Heartrate Goal Slider"</em> to the far right, indicating you want to perform strenuous exercise; the app will alert you with a message stating <em>"Max Heartrate...Take a Break"</em> indicating you should reduce your BPMs</li>
+</ol>
+
+<p><strong>Support or Questions</strong></p>
+
+<ul>
+<li>Contact <a href="mailto:david@heroku.com">us</a> if you have any questions about this Dreamforce'16 IOT Cloud &amp; Heroku Demo</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/heroku-softtrends">heroku-softtrends</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
